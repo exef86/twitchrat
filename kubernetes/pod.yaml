@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: twitch-events
+spec:
+  containers:
+  - command:
+    - /app/docker-entrypoint.sh
+    env:
+    - name: CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          key: clientid
+          name: twitch-api-access
+    - name: CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          key: clientsecret
+          name: twitch-api-access
+    - name: INFLUXDB_TOKEN
+      valueFrom:
+        secretKeyRef:
+          key: token
+          name: influxdb-operator-token
+    image: registry.digitalocean.com/xf86/twitch-collectors:latest
+    imagePullPolicy: Always
+    name: twitch-events
+
