@@ -18,7 +18,7 @@ def get_events(influx:InfluxDBClient, influx_regex:str, intensity_min:int) -> li
         SELECT count("message") AS "intensity"
         FROM "messages"
         WHERE "message"::field =~ {influx_regex} AND
-              time >= now() - 1d
+              time >= now() - 30d
         GROUP BY time(15s)
     ) WHERE "intensity" > {intensity_min}
     """
@@ -30,17 +30,19 @@ def get_events(influx:InfluxDBClient, influx_regex:str, intensity_min:int) -> li
         return []
 
 def get_stream_for_event(influx:InfluxDBClient, streamer:str, event_dt: datetime) -> list:
+    print(event_dt.isoformat())
     event_epoch_ns = event_dt.timestamp() * 1000000000
     event_epoch_ns = int(event_epoch_ns) # do not want Eulers number in format
     query = f"""
     SELECT "game_name", "started_at", "title", "viewer_count"
     FROM "streams"
     WHERE "streamer"::tag = '{streamer}' AND
-          {event_epoch_ns} >= time
-    ORDER BY time ASC
+          time <= {event_epoch_ns}
+    ORDER BY time DESC
     LIMIT 1
     """
     results = list(influx.query(query))
+    pprint(results)
     # array of array
     try:
         return results[0][0]
