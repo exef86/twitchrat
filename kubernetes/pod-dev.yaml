@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: twitchrat
+  name: twitchrat-dev
 spec:
   containers:
-  - name: twitchrat
+  - name: twitchrat-dev
     command: ["twitchrat/rat.py"]
     args: ["-s", "quin69", "--influxdb-database", "quin69chatdev"]
     env:
@@ -23,6 +23,6 @@ spec:
         secretKeyRef:
           key: token
           name: influxdb-operator-token
-    image: registry.digitalocean.com/xf86/twitchrat:latest
+    image: registry.digitalocean.com/xf86/twitchrat-dev:latest
     imagePullPolicy: Always
 

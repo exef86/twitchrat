@@ -4,10 +4,12 @@ RUN mkdir /app
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
+ENV PYTHONPATH="/app"
 
-RUN pip install -r requirements.txt
+COPY requirements.txt /app/requirements.txt
+
+RUN pip install -r /app/requirements.txt
 
 COPY src/ /app
 
-ENTRYPOINT [ "./docker-entrypoint.sh" ]
+ENTRYPOINT [ "twitchrat/rat.py" ]
