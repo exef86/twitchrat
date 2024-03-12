@@ -71,8 +71,6 @@ def main():
         # around that same time.
         for eventtype in events.keys():
             last_event_dt = None
-            num_events = len(events[eventtype])
-            logger.info(f"Processing {num_events} events.")
             for event in events[eventtype]:
                 event_dt = datetime.fromisoformat(event["time"])
                 stream = stream_for_event_get(influx, streamer, event_dt)
@@ -104,6 +102,9 @@ def main():
                 logger.info("Valid event, adding to points.")
                 points.append(point)
 
+        logger.info("Writing {len(points)} number of events...")
+        influx.write_points(points)
+        logger.info(f"Done writing {len(points)} number of events...")
         logger.info(f"Sleeping for {loop_interval} seconds")
         time.sleep(loop_interval)
 

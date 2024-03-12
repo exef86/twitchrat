@@ -6,7 +6,7 @@ spec:
   containers:
   - name: twitchrat
     command: ["twitchrat/rat.py"]
-    args: ["-s", "quin69", "--influxdb-database", "quin69chatdev"]
+    args: ["-s", "quin69", "--influxdb-database", "quin69chat"]
     env:
     - name: CLIENT_ID
       valueFrom:
